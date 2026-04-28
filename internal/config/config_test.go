@@ -165,6 +165,24 @@ bot:
 	}
 }
 
+// 测试：Auth.IsEnabled 显式设为 false
+func TestAuthConfig_IsEnabled_ExplicitFalse(t *testing.T) {
+	enabled := false
+	a := &AuthConfig{Enabled: &enabled}
+	if a.IsEnabled() {
+		t.Error("显式设为 false 时应返回 false")
+	}
+}
+
+// 测试：MessageConfig.IsAutoDeleteEnabled 显式设为 false
+func TestMessageConfig_IsAutoDeleteEnabled_ExplicitFalse(t *testing.T) {
+	autoDelete := false
+	m := &MessageConfig{AutoDelete: &autoDelete}
+	if m.IsAutoDeleteEnabled() {
+		t.Error("显式设为 false 时应返回 false")
+	}
+}
+
 // 测试：配置文件不存在时返回错误
 func TestLoad_FileNotFound(t *testing.T) {
 	_, err := Load("/nonexistent/path/config.yaml")

@@ -9,9 +9,19 @@ import (
 	"os/signal"
 	"syscall"
 
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+
 	"github.com/dnslin/aria2-tgbot/internal/config"
 	"github.com/dnslin/aria2-tgbot/internal/logger"
 )
+
+// 后续 Issue #3 将在此初始化 Bot 实例：
+//   botAPI, err := tgbotapi.NewBotAPI(cfg.Bot.Token)
+//   handler := telegram.NewHandler(svc, cfg)
+//   bot := telegram.New(botAPI, handler, cfg)
+//   go bot.Run()
+
+var _ = tgbotapi.BotAPI{} // 锁定 tgbotapi v5 依赖
 
 func main() {
 	configPath := flag.String("c", "./config.yaml", "配置文件路径")

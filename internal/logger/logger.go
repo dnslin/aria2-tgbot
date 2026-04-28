@@ -49,6 +49,7 @@ type Logger struct {
 }
 
 // New 创建 Logger 实例。日志目录不存在时自动创建。
+// MaxSize/MaxBackups/MaxAge 为 0 时采用 lumberjack 默认值（100MB/0/0），建议通过 config.SetDefaults() 设置合理值。
 func New(cfg Config) (*Logger, error) {
 	level := parseLevel(cfg.Level)
 

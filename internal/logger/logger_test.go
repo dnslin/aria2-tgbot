@@ -45,7 +45,7 @@ func TestLogger_LogLevels(t *testing.T) {
 	}
 }
 
-// 测试：日志级别过滤，debug 级别时不输出 debug 日志
+// 测试：日志级别过滤，info 级别时不输出 debug 日志
 func TestLogger_LevelFilter(t *testing.T) {
 	dir := t.TempDir()
 	log, err := New(Config{

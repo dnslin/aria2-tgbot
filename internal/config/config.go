@@ -30,6 +30,14 @@ func (a *AuthConfig) IsEnabled() bool {
 	return *a.Enabled
 }
 
+// IsAutoDeleteEnabled 返回全局自动删除是否开启，默认启用。
+func (m *MessageConfig) IsAutoDeleteEnabled() bool {
+	if m.AutoDelete == nil {
+		return true
+	}
+	return *m.AutoDelete
+}
+
 // MessageConfig 消息行为配置，运行时可通过命令修改并持久化
 type MessageConfig struct {
 	AutoDelete              *bool `yaml:"auto_delete"`

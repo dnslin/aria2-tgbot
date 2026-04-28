@@ -15,9 +15,9 @@ test:
 # 安装到系统（需要 root 权限）
 install: build
 	install -d /etc/aria2-tgbot
-	cp ./bin/aria2-tgbot /usr/local/bin/aria2-tgbot
-	cp ./config.yaml /etc/aria2-tgbot/config.yaml
-	cp ./aria2-tgbot.service /etc/systemd/system/
+	install -m 755 ./bin/aria2-tgbot /usr/local/bin/aria2-tgbot
+	install -m 600 ./config.yaml /etc/aria2-tgbot/config.yaml
+	install -m 644 ./aria2-tgbot.service /etc/systemd/system/
 	systemctl daemon-reload
 	systemctl enable aria2-tgbot
 	systemctl start aria2-tgbot
