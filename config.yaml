@@ -1,0 +1,42 @@
+# ===== Aria2 Telegram Bot 配置 =====
+
+# Bot 基础配置
+bot:
+  token: ""                     # Telegram Bot Token（必填，支持环境变量 BOT_TOKEN）
+  debug: false                  # 调试模式（开启后输出更多日志）
+
+# 权限控制
+auth:
+  enabled: true                 # 开启白名单
+  allow_users: []               # 允许的用户 ID 列表，如 [123456789, 987654321]
+
+# 消息行为（运行时可通过命令修改并自动持久化）
+message:
+  auto_delete: true             # 全局自动删除开关
+  delete_after: 180             # 默认删除时间（秒），0 = 不删
+  result_delete_after: 300      # 命令结果保留时间（秒）
+  progress_update_interval: 30  # 进度刷新间隔（秒）
+  install_log_delete: true      # 安装日志自动删除
+  error_delete_after: 0         # 错误消息保留时间（秒），0 = 不删
+  notify_delete_after: 0        # 下载完成通知保留时间（秒），0 = 不删
+
+# aria2 安装与连接配置
+aria2:
+  install_script_url: "https://git.io/aria2.sh"
+  install_path: "/usr/local/bin"
+  config_dir: "/root/.aria2c"
+  download_dir: "/root/downloads"
+  rpc_host: "127.0.0.1"
+  rpc_port: 6800
+  rpc_secret: ""                # 留空则安装时自动生成 16 位随机密钥
+  session_dir: "/root/.aria2c"
+  auto_start: true              # 安装后自动启动
+  enable_systemd: true          # 注册为 systemd 服务（开机自启）
+
+# 日志
+log:
+  dir: "./logs"
+  level: "info"                 # debug / info / warn / error
+  max_size: 10                  # 单个日志文件最大 MB
+  max_backups: 7                # 最多保留旧日志文件数
+  max_age: 30                   # 日志最长保留天数

@@ -1,0 +1,13 @@
+[Unit]
+Description=Aria2 Telegram Bot
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/aria2-tgbot -c /etc/aria2-tgbot/config.yaml
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
