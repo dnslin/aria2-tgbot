@@ -85,14 +85,6 @@ func (h *Handler) authorize(userID int64) bool {
 	return Authorize(h.cfg, userID)
 }
 
-// sendReply 发送纯文本回复消息（占位实现，后续 #4 替换为 MessageManager.Send）。
-func (h *Handler) sendReply(chatID int64, text string) {
-	msg := tgbotapi.NewMessage(chatID, text)
-	if _, err := h.bot.Send(msg); err != nil {
-		h.logger.Error("发送消息失败 (chatID: %d): %v", chatID, err)
-	}
-}
-
 // parseCommand 从消息文本中解析命令名和参数。
 // "/add http://example.com" → "/add", ["http://example.com"]
 // "/help" → "/help", []
