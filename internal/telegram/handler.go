@@ -2,7 +2,6 @@ package telegram
 
 import (
 	"strings"
-	"sync"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
@@ -18,9 +17,8 @@ type Handler struct {
 	bot    *tgbotapi.BotAPI
 	logger *logger.Logger
 
-	commands map[string]*Command // 命令注册表
-	gidMap   map[int64]map[int]string // chatID -> 编号 -> GID
-	mu       sync.RWMutex               // 保护 gidMap
+	commands map[string]*Command           // 命令注册表
+	gidMap   map[int64]map[int]string     // chatID -> 编号 -> GID（待 #5 添加访问方法）
 }
 
 // NewHandler 创建 Handler 实例。
