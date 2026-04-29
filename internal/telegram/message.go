@@ -105,20 +105,23 @@ func (m *MessageManager) setTimer(chatID int64, msgID int, ttl int) {
 
 // deleteAndCleanup 删除消息并清理定时器记录。
 func (m *MessageManager) deleteAndCleanup(chatID int64, msgID int) {
+	// 先清理定时器记录（无论 API 调用是否成功）
+	defer func() {
+		m.mu.Lock()
+		defer m.mu.Unlock()
+		if m.timers[chatID] != nil {
+			delete(m.timers[chatID], msgID)
+			if len(m.timers[chatID]) == 0 {
+				delete(m.timers, chatID)
+			}
+		}
+	}()
+
 	// 请求 Telegram 删除消息（忽略错误，消息可能已被手动删除）
 	_, err := m.bot.Request(tgbotapi.NewDeleteMessage(chatID, msgID))
 	if err != nil {
 		// 静默忽略：消息可能已被手动删除或不存在
 		return
-	}
-
-	m.mu.Lock()
-	defer m.mu.Unlock()
-	if m.timers[chatID] != nil {
-		delete(m.timers[chatID], msgID)
-		if len(m.timers[chatID]) == 0 {
-			delete(m.timers, chatID)
-		}
 	}
 }
 
