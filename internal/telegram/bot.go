@@ -33,7 +33,8 @@ func New(svc any, cfg *config.Config, log *logger.Logger) (*Bot, error) {
 		stopCh: make(chan struct{}),
 	}
 
-	bot.handler = NewHandler(svc, cfg, api, log)
+	msgMgr := NewMessageManager(api, cfg)
+	bot.handler = NewHandler(svc, cfg, api, log, msgMgr)
 	return bot, nil
 }
 

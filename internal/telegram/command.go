@@ -305,149 +305,149 @@ func (h *Handler) RegisterCommands() map[string]*Command {
 // ===== 帮助 & 状态命令处理（占位） =====
 
 func (h *Handler) handleHelp(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handlePing(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "pong!")
+	h.msgMgr.Send(msg.Chat.ID, "pong!", LabelCommand)
 }
 
 func (h *Handler) handleHealth(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 // ===== 安装管理命令处理（占位） =====
 
 func (h *Handler) handleInstall(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleUninstall(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleUpgrade(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 // ===== 进程管理命令处理（占位） =====
 
 func (h *Handler) handleAriaStart(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleAriaStop(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleAriaRestart(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleAriaStatus(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 // ===== 下载操作命令处理（占位） =====
 
 func (h *Handler) handleAdd(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleAddMagnet(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handlePause(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleResume(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleRemove(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 // ===== 列表查询命令处理（占位） =====
 
 func (h *Handler) handleList(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleDone(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleClear(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 // ===== 速度控制命令处理（占位） =====
 
 func (h *Handler) handleLimitGlobal(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleLimitTask(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 // ===== Aria2 配置命令处理（占位） =====
 
 func (h *Handler) handleConf(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleConfDir(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleConfRpcPort(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleConfSecret(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleResetSecret(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 // ===== 统计命令处理（占位） =====
 
 func (h *Handler) handleStats(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 // ===== 消息行为命令处理（占位） =====
 
 func (h *Handler) handleMsgConfig(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleMsgAutodel(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleMsgTime(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleMsgResult(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleMsgError(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleMsgNotify(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }
 
 func (h *Handler) handleMsgProgress(msg *tgbotapi.Message, args []string) {
-	h.sendReply(msg.Chat.ID, "该功能将在后续版本实现")
+	h.msgMgr.Send(msg.Chat.ID, "该功能将在后续版本实现", LabelCommand)
 }

@@ -17,18 +17,20 @@ type Handler struct {
 	bot    *tgbotapi.BotAPI
 	logger *logger.Logger
 
+	msgMgr   *MessageManager              // 消息管理器
 	commands map[string]*Command           // 命令注册表
 	gidMap   map[int64]map[int]string     // chatID -> 编号 -> GID（待 #5 添加访问方法）
 }
 
 // NewHandler 创建 Handler 实例。
 // svc 参数当前为占位接口，后续 Issue #5 完成后注入真实 service.Container。
-func NewHandler(svc any, cfg *config.Config, bot *tgbotapi.BotAPI, log *logger.Logger) *Handler {
+func NewHandler(svc any, cfg *config.Config, bot *tgbotapi.BotAPI, log *logger.Logger, msgMgr *MessageManager) *Handler {
 	h := &Handler{
 		svc:    svc,
 		cfg:    cfg,
 		bot:    bot,
 		logger: log,
+		msgMgr: msgMgr,
 		gidMap: make(map[int64]map[int]string),
 	}
 	h.commands = h.RegisterCommands()
@@ -81,14 +83,6 @@ func (h *Handler) HandleUpdate(update tgbotapi.Update) {
 // authorize 校验用户是否有权限使用 Bot。
 func (h *Handler) authorize(userID int64) bool {
 	return Authorize(h.cfg, userID)
-}
-
-// sendReply 发送纯文本回复消息（占位实现，后续 #4 替换为 MessageManager.Send）。
-func (h *Handler) sendReply(chatID int64, text string) {
-	msg := tgbotapi.NewMessage(chatID, text)
-	if _, err := h.bot.Send(msg); err != nil {
-		h.logger.Error("发送消息失败 (chatID: %d): %v", chatID, err)
-	}
 }
 
 // parseCommand 从消息文本中解析命令名和参数。
