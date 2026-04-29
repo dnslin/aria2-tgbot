@@ -3,11 +3,13 @@ package aria2
 import (
 	"bytes"
 	"crypto/rand"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -126,9 +128,13 @@ func (c *Client) AddURI(uris []string, opts *AddOptions) (string, error) {
 
 // AddTorrent 添加种子文件下载，filepath 为服务器本地路径
 func (c *Client) AddTorrent(filepath string) (string, error) {
+	data, err := os.ReadFile(filepath)
+	if err != nil {
+		return "", fmt.Errorf("读取种子文件失败: %w", err)
+	}
+	encoded := base64.StdEncoding.EncodeToString(data)
 	var gid string
-	// aria2.addTorrent 接受 base64 编码的种子内容
-	if err := c.call("addTorrent", []any{filepath}, &gid); err != nil {
+	if err := c.call("addTorrent", []any{encoded}, &gid); err != nil {
 		return "", err
 	}
 	return gid, nil

@@ -38,7 +38,7 @@ func GenerateConfig(p ConfigParams) string {
 
 	sb.WriteString("# ===== 基本设置 =====\n")
 	sb.WriteString(fmt.Sprintf("dir=%s\n", p.DownloadDir))
-	sb.WriteString("input-file=/root/.aria2c/aria2.session\n")
+	sb.WriteString(fmt.Sprintf("input-file=%s/aria2.session\n", p.SessionDir))
 	sb.WriteString(fmt.Sprintf("save-session=%s/aria2.session\n", p.SessionDir))
 	sb.WriteString("save-session-interval=30\n")
 	sb.WriteString("force-save=true\n")

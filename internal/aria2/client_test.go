@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -206,7 +207,11 @@ func TestClient_AllMethodNames(t *testing.T) {
 
 	// 调用所有公开方法
 	client.AddURI([]string{"http://x.com"}, nil)
-	client.AddTorrent("/tmp/test.torrent")
+	tmpFile, _ := os.CreateTemp("", "test-torrent-*.torrent")
+	tmpFile.Write([]byte("dummy-data"))
+	tmpFile.Close()
+	defer os.Remove(tmpFile.Name())
+	client.AddTorrent(tmpFile.Name())
 	client.AddMetalink("http://x.com/metalink")
 	client.Pause("gid1")
 	client.PauseAll()

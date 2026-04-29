@@ -106,7 +106,10 @@ func (i *Installer) Install() (string, error) {
 		return "", fmt.Errorf("写入配置文件失败: %w", err)
 	}
 
-	// 创建 session 文件
+	// 创建 session 目录和文件
+	if err := os.MkdirAll(i.sessionDir, 0755); err != nil {
+		return "", fmt.Errorf("创建 session 目录失败: %w", err)
+	}
 	sessionFile := filepath.Join(i.sessionDir, "aria2.session")
 	if err := os.WriteFile(sessionFile, []byte{}, 0644); err != nil {
 		return "", fmt.Errorf("创建 session 文件失败: %w", err)
@@ -137,7 +140,9 @@ func (i *Installer) Uninstall() error {
 
 	// 1. 停止进程
 	i.logf("正在停止 aria2 进程...")
-	i.Stop()
+	if err := i.Stop(); err != nil {
+		i.logf("停止 aria2 时出现警告: %v", err)
+	}
 
 	// 2. 下载脚本并执行卸载
 	i.logf("正在下载卸载脚本...")
@@ -176,9 +181,13 @@ func (i *Installer) Upgrade() (string, error) {
 	defer os.Remove(scriptPath)
 
 	i.logf("正在执行升级（配置将被保留）...")
-	if err := i.runBash(scriptPath); err != nil {
-		return "", fmt.Errorf("升级脚本执行失败: %w", err)
+	// 传入 "1" 选择安装/升级选项，避免交互菜单阻塞
+	cmd := exec.Command("bash", scriptPath)
+	cmd.Stdin = strings.NewReader("1\n")
+	if out, err := cmd.CombinedOutput(); err != nil {
+		return "", fmt.Errorf("升级脚本执行失败: %s", string(out))
 	}
+	i.logf("  升级脚本执行完成")
 
 	// 重启以应用新版本
 	if i.IsRunning() {
@@ -229,7 +238,7 @@ func (i *Installer) Start() error {
 	return nil
 }
 
-// Stop 停止 aria2 进程
+// Stop 停止 aria2 进程（幂等：进程已停止时返回 nil）
 func (i *Installer) Stop() error {
 	if i.hasSystemd() {
 		cmd := exec.Command("systemctl", "stop", "aria2")
@@ -239,10 +248,17 @@ func (i *Installer) Stop() error {
 		return nil
 	}
 
-	// 通过 pkill 停止
+	// 先检查进程是否存在
+	if !i.IsRunning() {
+		return nil
+	}
+
 	cmd := exec.Command("pkill", "-f", "aria2c")
 	if out, err := cmd.CombinedOutput(); err != nil {
-		// pkill 在进程不存在时返回非零
+		// pkill 退出码 1 表示无匹配进程，视为正常
+		if exitErr, ok := err.(*exec.ExitError); ok && exitErr.ExitCode() == 1 {
+			return nil
+		}
 		return fmt.Errorf("停止 aria2 失败: %s", string(out))
 	}
 	return nil
@@ -354,6 +370,9 @@ func (i *Installer) HealthCheck() (*HealthInfo, error) {
 
 // ===== 内部方法 =====
 
+// scriptHTTPClient 用于下载脚本的 HTTP 客户端（30 秒超时）
+var scriptHTTPClient = &http.Client{Timeout: 30 * time.Second}
+
 // downloadScript 下载安装脚本，支持多 URL fallback
 func (i *Installer) downloadScript() (string, error) {
 	var lastErr error
@@ -361,29 +380,32 @@ func (i *Installer) downloadScript() (string, error) {
 	for _, url := range i.scriptURLs {
 		i.logf("  尝试: %s", url)
 
-		resp, err := http.Get(url)
+		resp, err := scriptHTTPClient.Get(url)
 		if err != nil {
 			lastErr = err
 			continue
 		}
-		defer resp.Body.Close()
 
 		if resp.StatusCode != http.StatusOK {
+			resp.Body.Close()
 			lastErr = fmt.Errorf("HTTP %d", resp.StatusCode)
 			continue
 		}
 
 		tmpFile, err := os.CreateTemp("", "aria2-sh-*.sh")
 		if err != nil {
+			resp.Body.Close()
 			return "", fmt.Errorf("创建临时文件失败: %w", err)
 		}
 
 		if _, err := io.Copy(tmpFile, resp.Body); err != nil {
+			resp.Body.Close()
 			tmpFile.Close()
 			os.Remove(tmpFile.Name())
 			lastErr = err
 			continue
 		}
+		resp.Body.Close()
 		tmpFile.Close()
 
 		// 确保脚本可执行
@@ -451,9 +473,18 @@ func diskUsage(path string) (*diskUsageInfo, error) {
 		return nil, fmt.Errorf("df 输出字段不足")
 	}
 
-	total, _ := strconv.ParseUint(fields[1], 10, 64)
-	used, _ := strconv.ParseUint(fields[2], 10, 64)
-	free, _ := strconv.ParseUint(fields[3], 10, 64)
+	total, err := strconv.ParseUint(fields[1], 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("解析磁盘总量失败: %w", err)
+	}
+	used, err := strconv.ParseUint(fields[2], 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("解析磁盘已用失败: %w", err)
+	}
+	free, err := strconv.ParseUint(fields[3], 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("解析磁盘可用失败: %w", err)
+	}
 
 	var usedPercent float64
 	if total > 0 {
