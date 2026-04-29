@@ -163,6 +163,11 @@ func (c *Config) SetDefaults() {
 	}
 }
 
+// FilePath 返回配置文件路径。
+func (c *Config) FilePath() string {
+	return c.filePath
+}
+
 // Save 将当前配置序列化为 YAML 写回文件。
 // 使用互斥锁防止并发写入竞态。
 func (c *Config) Save(path string) error {
