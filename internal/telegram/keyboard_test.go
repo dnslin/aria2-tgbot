@@ -63,6 +63,12 @@ func TestBuildTaskKeyboard_Paused(t *testing.T) {
 	if *row[0].CallbackData != "resume:xyz789" {
 		t.Errorf("data 应为 'resume:xyz789', 实际 %q", *row[0].CallbackData)
 	}
+	if row[1].Text != "删除" {
+		t.Errorf("按钮1 文本应为 '删除', 实际 %q", row[1].Text)
+	}
+	if *row[1].CallbackData != "remove:xyz789" {
+		t.Errorf("data 应为 'remove:xyz789', 实际 %q", *row[1].CallbackData)
+	}
 }
 
 // ===== BuildDoneTaskKeyboard 测试 =====
