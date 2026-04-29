@@ -9,19 +9,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-
 	"github.com/dnslin/aria2-tgbot/internal/config"
 	"github.com/dnslin/aria2-tgbot/internal/logger"
+	"github.com/dnslin/aria2-tgbot/internal/telegram"
 )
-
-// 后续 Issue #3 将在此初始化 Bot 实例：
-//   botAPI, err := tgbotapi.NewBotAPI(cfg.Bot.Token)
-//   handler := telegram.NewHandler(svc, cfg)
-//   bot := telegram.New(botAPI, handler, cfg)
-//   go bot.Run()
-
-var _ = tgbotapi.BotAPI{} // 锁定 tgbotapi v5 依赖
 
 func main() {
 	configPath := flag.String("c", "./config.yaml", "配置文件路径")
@@ -52,7 +43,18 @@ func main() {
 	log.Info("配置文件: %s", *configPath)
 	log.Info("日志级别: %s", cfg.Log.Level)
 	log.Info("权限控制: %v", cfg.Auth.IsEnabled())
-	log.Info("Bot 已就绪，等待 Telegram Updates")
+
+	// 创建 Bot 实例（svc 为 nil 占位，后续 #5 注入真实 Service）
+	bot, err := telegram.New(nil, cfg, log)
+	if err != nil {
+		log.Error("创建 Bot 实例失败: %v", err)
+		os.Exit(1)
+	}
+
+	log.Info("Bot 已就绪，启动 Telegram Update 轮询")
+
+	// 启动 Bot 事件循环（后台 goroutine）
+	go bot.Run()
 
 	// 等待退出信号
 	sigCh := make(chan os.Signal, 1)
@@ -60,4 +62,6 @@ func main() {
 	sig := <-sigCh
 
 	log.Info("收到信号 %v，Bot 正在关闭...", sig)
+	bot.Stop()
+	log.Info("Bot 已安全关闭")
 }
